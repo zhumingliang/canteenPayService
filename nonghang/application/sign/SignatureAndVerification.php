@@ -44,7 +44,7 @@ class SignatureAndVerification
      */
     public static function read_cer_and_verify_sign($contentBody, $signature)
     {
-        $filePath = 'static/resources/certificate/TrustPayTest.cer';
+        $filePath = 'static/resources/certificate/TrustPay.cer';
         $certificateCAcerContent = file_get_contents($filePath);
         $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
             . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL)
