@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>根据缴费项目编号查询签约</title>
+</head>
+<body>
+<br><br><br><br><br><br>
+<center>
+    <h2>根据缴费项目编号查询签约</h2>
+    <h2>返回报文消息头：</h2>
+    <table border="1" cellspacing="0">
+        {if isset($data.transCode) && ($data.transCode !== '')}
+            <tr>
+                <th>交易码(transCode):</th>
+                <th>{$data.transCode}</th>
+            </tr>
+        {/if}
+        {if isset($data.transFlag) && ($data.transFlag !== '')}
+            <tr>
+                <th>交易上行下送标志(transFlag):</th>
+                <th>{$data.transFlag}</th>
+            </tr>
+        {/if}
+        {if isset($data.transSeqNum) && ($data.transSeqNum !== '')}
+            <tr>
+                <th>缴费中心交易序列号(transSeqNum):</th>
+                <th>{$data.transSeqNum}</th>
+            </tr>
+        {/if}
+        {if isset($data.timeStamp) && ($data.timeStamp !== '')}
+            <tr>
+                <th>时间戳(timeStamp):</th>
+                <th>{$data.timeStamp}</th>
+            </tr>
+        {/if}
+        {if isset($data.returnCode) && ($data.returnCode !== '')}
+            <tr>
+                <th>返回值(returnCode):</th>
+                <th>{$data.returnCode}</th>
+            </tr>
+        {/if}
+        {if isset($data.returnMessage) && ($data.returnMessage !== '')}
+            <tr>
+                <th>返回提示信息(returnMessage):</th>
+                <th>{$data.returnMessage}</th>
+            </tr>
+        {/if}
+    </table>
+
+    <h2>返回报文消息体：</h2>
+    <table border="1" cellspacing="0">
+        {if isset($data.epayCode) && ($data.epayCode !== '')}
+            <tr>
+                <th>缴费项目唯一标识号(epayCode):</th>
+                <th>{$data.epayCode}</th>
+            </tr>
+        {/if}
+        {if isset($data.merchantId) && ($data.merchantId !== '')}
+            <tr>
+                <th>商户编号(merchantId):</th>
+                <th>{$data.merchantId}</th>
+            </tr>
+        {/if}
+        {if isset($data.hasNextPage) && ($data.hasNextPage !== '')}
+            <tr>
+                <th>是否有下一页(hasNextPage):</th>
+                <th>{$data.hasNextPage}</th>
+            </tr>
+        {/if}
+        {if isset($data.contractList) && ($data.contractList !== '')}
+            <tr>
+                <th>签约信息列表(contractList):</th>
+                <th>{$data.contractList}</th>
+            </tr>
+        {/if}
+    </table>
+    <table>
+        {if ($data.pageNo > '1')}
+        <form action="querybycodepay" method="post" >
+            <input name="merchantId" value="{$data.merchantId}" hidden ="visable">
+            <input name="epayCode" value="{$data.epayCode}" hidden ="visable">
+            <input name="agentSignStatus" value="{$data.agentSignStatus}" hidden ="visable">
+            <input name="pageNo" value="{$data['pageNo'] -1}"  hidden ="visable">
+            <input name="pageSize" value="{$data.pageSize}" hidden ="visable">
+            <input type="submit" value="上一页"/>
+        </form>
+        {/if}
+        {if ($data.hasNextPage == 'true')}
+        <form action="querybycodepay" method="post" >
+            <input name="merchantId" value="{$data.merchantId}" hidden ="visable">
+            <input name="epayCode" value="{$data.epayCode}" hidden ="visable">
+            <input name="agentSignStatus" value="{$data.agentSignStatus}" hidden ="visable">
+            <input name="pageNo" value="{$data['pageNo'] +1}"  hidden ="visable">
+            <input name="pageSize" value="{$data.pageSize}" hidden ="visable">
+            <input type="submit" value="下一页"/>
+        </form>
+        {/if}
+    </table>
+</center>
+</body>
+</html>

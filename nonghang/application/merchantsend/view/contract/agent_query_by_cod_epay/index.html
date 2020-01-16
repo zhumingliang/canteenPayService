@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>根据缴费项目编号查询签约接口</title>
+</head>
+<body>
+<br><br><br><br><br><br>
+<center>
+    <h2>根据缴费项目编号查询签约接口</h2>
+    <h3>接口:{$url}</h3>
+    <h3>交易码:{$transCode}</h3><br>
+    <form action="agent_query_by_cod_epay\querybycodepay" method="post" >
+        <table>
+            <tr>
+                <td>商户编号(merchantId)：</td>
+                <td><input type="text" name="merchantId"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>缴费项目编号(epayCode)：</td>
+                <td><input type="text" name="epayCode"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>查询状态(agentSignStatus)：</td>
+                <td><input type="text" name="agentSignStatus"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>页码(pageNo)：</td>
+                <td><input type="text" name="pageNo"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>页大小(pageSize)：</td>
+                <td><input type="text" name="pageSize"/><font color="red">*必输</font></td>
+            </tr>
+        </table>
+        <input type="submit" value="提交"/>
+    </form>
+</center>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>授权支付签约确认</title>
+</head>
+<body>
+<br><br><br><br><br><br>
+<center>
+    <h2>授权支付签约确认</h2>
+    <h2>返回报文消息头：</h2>
+    <table border="1" cellspacing="0">
+        {if isset($message.head.transCode) && ($message.head.transCode !== '')}
+            <tr>
+                <th>交易码(transCode):</th>
+                <th>{$message.head.transCode }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.transFlag) && ($message.head.transFlag !== '')}
+            <tr>
+                <th>交易上行下送标志(transFlag):</th>
+                <th>{$message.head.transFlag }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.transSeqNum) && ($message.head.transSeqNum !== '')}
+            <tr>
+                <th>缴费中心交易序列号(transSeqNum):</th>
+                <th>{$message.head.transSeqNum }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.timeStamp) && ($message.head.timeStamp !== '')}
+            <tr>
+                <th>时间戳(timeStamp):</th>
+                <th>{$message.head.timeStamp }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.returnCode) && ($message.head.returnCode !== '')}
+            <tr>
+                <th>返回值(returnCode):</th>
+                <th>{$message.head.returnCode }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.returnMessage) && ($message.head.returnMessage !== '')}
+            <tr>
+                <th>返回提示信息(returnMessage):</th>
+                <th>{$message.head.returnMessage }</th>
+            </tr>
+        {/if}
+    </table>
+
+    <h2>返回报文消息体：</h2>
+    <table border="1" cellspacing="0">
+        {if isset($message.info.agentSignNo) && ($message.info.agentSignNo !== '')}
+            <tr>
+                <th>商户交易编号(agentSignNo):</th>
+                <th>{$message.info.agentSignNo }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.agentSignNo) && ($message.info.agentSignNo !== '')}
+            <tr>
+                <th>签约编号(agentSignNo):</th>
+                <th>{$message.info.agentSignNo }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.merchantId) && ($message.info.merchantId !== '')}
+            <tr>
+                <th>商户编号(merchantId):</th>
+                <th>{$message.info.merchantId }</th>
+            </tr>
+        {/if}
+    </table>
+</center>
+</body>
+</html>

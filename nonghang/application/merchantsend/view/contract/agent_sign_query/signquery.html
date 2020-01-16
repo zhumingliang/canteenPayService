@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>授权缴费签约/解约结果查询</title>
+</head>
+<body>
+<br><br><br><br><br><br>
+<center>
+    <h2>授权缴费签约/解约结果查询</h2>
+    <h2>返回报文消息头：</h2>
+    <table border="1" cellspacing="0">
+        {if isset($message.head.transCode) && ($message.head.transCode !== '')}
+            <tr>
+                <th>交易码(transCode):</th>
+                <th>{$message.head.transCode }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.transFlag) && ($message.head.transFlag !== '')}
+        <tr>
+            <th>交易上行下送标志(transFlag):</th>
+            <th>{$message.head.transFlag }</th>
+        </tr>
+        {/if}
+        {if isset($message.head.transSeqNum) && ($message.head.transSeqNum !== '')}
+            <tr>
+                <th>缴费中心交易序列号(transSeqNum):</th>
+                <th>{$message.head.transSeqNum }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.timeStamp) && ($message.head.timeStamp !== '')}
+            <tr>
+                <th>时间戳(timeStamp):</th>
+                <th>{$message.head.timeStamp }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.returnCode) && ($message.head.returnCode !== '')}
+            <tr>
+                <th>返回值(returnCode):</th>
+                <th>{$message.head.returnCode }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.returnMessage) && ($message.head.returnMessage !== '')}
+            <tr>
+                <th>返回提示信息(returnMessage):</th>
+                <th>{$message.head.returnMessage }</th>
+            </tr>
+        {/if}
+    </table>
+
+    <h2>返回报文消息体：</h2>
+    <table border="1" cellspacing="0">
+        {if isset($message.info.orderNo) && ($message.info.orderNo !== '')}
+            <tr>
+                <th>商户交易编号(orderNo):</th>
+                <th>{$message.info.orderNo}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.agentSignNo) && ($message.info.agentSignNo !== '')}
+            <tr>
+                <th>签约编号(agentSignNo):</th>
+                <th>{$message.info.agentSignNo}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.signDate) && ($message.info.signDate !== '')}
+            <tr>
+                <th>签约日期(signDate):</th>
+                <th>{$message.info.signDate}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.unSignDate) && ($message.info.unSignDate !== '')}
+            <tr>
+                <th>解约日期(unSignDate):</th>
+                <th>{$message.info.unSignDate}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.agentSignStatus) && ($message.info.agentSignStatus !== '')}
+            <tr>
+                <th>签约/解约状态(agentSignStatus):</th>
+                <th>{$message.info.agentSignStatus}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.certificateNo) && ($message.info.certificateNo !== '')}
+            <tr>
+                <th>证件号码(certificateNo):</th>
+                <th>{$message.info.certificateNo}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.certificateType) && ($message.info.certificateType !== '')}
+            <tr>
+                <th>证件类型(certificateType):</th>
+                <th>{$message.info.certificateType}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.last4CardNo) && ($message.info.last4CardNo !== '')}
+            <tr>
+                <th>签约卡号后四位(last4CardNo):</th>
+                <th>{$message.info.last4CardNo}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.cardType) && ($message.info.cardType !== '')}
+            <tr>
+                <th>签约卡类型(cardType):</th>
+                <th>{$message.info.cardType}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.merchantId) && ($message.info.merchantId !== '')}
+            <tr>
+                <th>商户编号(merchantId):</th>
+                <th>{$message.info.merchantId}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.epayCode) && ($message.info.epayCode !== '')}
+            <tr>
+                <th>缴费项目唯一标识号(epayCode):</th>
+                <th>{$message.info.epayCode}</th>
+            </tr>
+        {/if}
+        {if isset($message.info.input1) && ($message.info.input1 !== '')}
+            <tr>
+                <th>输入要素1(input1):</th>
+                <th>{$message.info.input1 }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.input2) && ($message.info.input2 !== '')}
+            <tr>
+                <th>输入要素2(input2):</th>
+                <th>{$message.info.input2 }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.input3) && ($message.info.input3 !== '')}
+            <tr>
+                <th>输入要素3(input3):</th>
+                <th>{$message.info.input3 }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.input4) && ($message.info.input4 !== '')}
+            <tr>
+                <th>输入要素4(input4):</th>
+                <th>{$message.info.input4 }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.input5) && ($message.info.input5 !== '')}
+            <tr>
+                <th>输入要素5(input5):</th>
+                <th>{$message.info.input5 }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.invaidDate) && ($message.info.invaidDate !== '')}
+            <tr>
+                <th>签约有效期(invaidDate):</th>
+                <th>{$message.info.invaidDate }</th>
+            </tr>
+        {/if}
+    </table>
+</center>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>缴费单笔流水退款接口</title>
+    <style type="text/css">
+        table{
+            margin: auto;
+            text-align: left;
+        }
+        table td{
+            /* width:160px; */
+            height:30px;
+            text-align: left;
+        }
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<br><br><br><br><br><br>
+    <h2>缴费单笔流水退款接口</h2>
+    <h2>返回报文消息头(head):</h2>
+    <table border="1" cellspacing="0">
+        {if isset($message.head.tranCode) && ($message.head.tranCode !== '')}
+            <tr>
+                <th>交易码(tranCode):</th>
+                <th>{$message.head.tranCode }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.transFlag) && ($message.head.transFlag !== '')}
+            <tr>
+                <th>交易上行下送标志(transFlag):</th>
+                <th>{$message.head.transFlag }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.transSeqNum) && ($message.head.transSeqNum !== '')}
+            <tr>
+                <th>缴费中心交易序列号(transSeqNum):</th>
+                <th>{$message.head.transSeqNum }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.timeStamp) && ($message.head.timeStamp !== '')}
+            <tr>
+                <th>时间戳(timeStamp):</th>
+                <th>{$message.head.timeStamp }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.returnCode) && ($message.head.returnCode !== '')}
+            <tr>
+                <th>查询返回码(returnCode):</th>
+                <th>{$message.head.returnCode  }</th>
+            </tr>
+        {/if}
+        {if isset($message.head.returnMessage) && ($message.head.returnMessage !== '')}
+            <tr>
+                <th>返回提示信息(returnMessage):</th>
+                <th>{$message.head.returnMessage }</th>
+            </tr>
+        {/if}
+    </table>
+    <h2>返回报文消息体(info):</h2>
+    <table border="1" cellspacing="0">
+        {if isset($message.info.refundNo) && ($message.info.refundNo !== '')}
+            <tr>
+                <th>缴费中心退款流水号(refundNo):</th>
+                <th>{$message.info.refundNo }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.merchantId) && ($message.info.merchantId !== '')}
+            <tr>
+                <th>商户编号(merchantId):</th>
+                <th>{$message.info.merchantId }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.traceNo) && ($message.info.traceNo !== '')}
+            <tr>
+                <th>缴费中心流水号(traceNo):</th>
+                <th>{$message.info.traceNo }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.refundSettleDate) && ($message.info.refundSettleDate !== '')}
+            <tr>
+                <th>退款会计日期(refundSettleDate):</th>
+                <th>{$message.info.refundSettleDate }</th>
+            </tr>
+        {/if}
+        {if isset($message.info.amtRefund) && ($message.info.amtRefund !== '')}
+            <tr>
+                <th>退款金额(amtRefund):</th>
+                <th>{$message.info.amtRefund }</th>
+            </tr>
+        {/if}
+    </table>
+</body>
+</html>

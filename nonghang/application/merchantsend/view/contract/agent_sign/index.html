@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>授权支付签约申请接口</title>
+</head>
+<body>
+    <center>
+    <br><br><br><br><br><br>
+    <h2>授权支付签约申请接口</h2>
+    <h3>接口:{$url}</h3>
+    <h3>交易码:{$transCode}</h3><br>
+    <form action="agent_sign\submit" method="post" >
+        <input type="hidden" name="trVersion" value="${param.trVersion }">
+        <table>
+            <tr>
+                <td>缴费项目编号(epayCode)：</td>
+                <td><input type="text" name="epayCode"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>商户编号(merchantId)：</td>
+                <td><input type="text" name="merchantId"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>输入要素1(input1)：</td>
+                <td><input type="text" name="input1"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>输入要素2(input2)：</td>
+                <td><input type="text" name="input2"/></td>
+            </tr>
+            <tr>
+                <td>输入要素3(input3)：</td>
+                <td><input type="text" name="input3"/></td>
+            </tr>
+            <tr>
+                <td>输入要素4(input4)：</td>
+                <td><input type="text" name="input4"/></td>
+            </tr>
+            <tr>
+                <td>输入要素5(input5)：</td>
+                <td><input type="text" name="input5"/></td>
+            </tr>
+            <tr>
+                <td>商户交易编号(orderNo)：</td>
+                <td><input type="text" name="orderNo"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>客户编号(userId)：</td>
+                <td><input type="text" name="userId"/></td>
+            </tr>
+            <tr>
+                <td>客户姓名(userName)：</td>
+                <td><input type="text" name="userName"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>证件号(certificateNo)：</td>
+                <td><input type="text" name="certificateNo"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>证件类型(certificateType)：</td>
+                <!-- <td><input type="text" name="certificateType"/><font color="red">*必输</font></td> -->
+                <td>
+                    <select name="certificateType">
+                        <option value="I" selected="selected">公民身份证</option>
+                        <option value="P">中国护照</option>
+                        <option value="S">军人身份证</option>
+                        <option value="J">警官证</option>
+                        <option value="K">户口簿</option>
+                        <option value="T">临时身份证</option>
+                        <option value="F">外国护照</option>
+                        <option value="D">港澳通行证</option>
+                        <option value="W">台胞通行证</option>
+                        <option value="R">离休干部荣誉证</option>
+                        <option value="B">军官退休证</option>
+                        <option value="A">文职干部退休证</option>
+                        <option value="C">军事院校学员证</option>
+                        <option value="E">武装警察身份证</option>
+                        <option value="G">军官证</option>
+                        <option value="H">文职干部证</option>
+                        <option value="L">军人士兵证</option>
+                        <option value="M">武警士兵证</option>
+                        <option value="U">其他证件</option>
+                    </select><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>签约卡号(cardNo)：</td>
+                <td><input type="text" name="cardNo"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>签约卡类型(cardType)：</td>
+                <!-- <td><input type="text" name="cardType"/><font color="red">*必输</font></td>-->
+                <td>
+                    <select name="cardType">
+                        <option value="1">农行借记卡准贷记卡</option>
+                        <option value="3">农行贷记卡</option>
+                        <option value="A">农行卡合并</option>
+                    </select><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>手机号码(mobileNo)：</td>
+                <td><input type="text" name="mobileNo"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>签约有效期(invaidDate)：</td>
+                <td><input type="text" name="invaidDate"/><font color="red">*必输</font>yyyy/MM/dd</td>
+            </tr>
+            <tr>
+                <td>卡片有效期(cardDueDate)：</td>
+                <td><input type="text" name="cardDueDate"/></td>
+            </tr>
+            <tr>
+                <td>卡片CVV2码(cVV2)：</td>
+                <td><input type="text" name="cVV2"/></td>
+            </tr>
+        </table>
+        <input type="submit" value="提交"/>
+    </form>
+    </center>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>授权缴费签约/解约结果查询接口</title>
+</head>
+<body>
+<br><br><br><br><br><br>
+<center>
+    <h2>授权缴费签约/解约结果查询接口</h2>
+    <h3>接口:{$url}</h3>
+    <h3>交易码:{$transCode}</h3><br>
+    <form action="agent_sign_query\signquery"  method="post">
+        <input type="hidden" name="trVersion" value="${param.trVersion }">
+        <table>
+            <tr>
+                <td>签约编号(agentSignNo)：</td>
+                <td><input type="text" name="agentSignNo"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>缴费项目编号(epayCode)：</td>
+                <td><input type="text" name="epayCode"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>商户编号(merchantId)：</td>
+                <td><input type="text" name="merchantId"/><font color="red">*必输</font></td>
+            </tr>
+            <tr>
+                <td>商户交易编号(orderNo)：</td>
+                <td><input type="text" name="orderNo"/><font color="red">*必输</font></td>
+            </tr>
+        </table>
+        <input type="submit" value="提交"/>
+    </form>
+</center>
+</body>
+</html>
