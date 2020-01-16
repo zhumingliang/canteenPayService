@@ -5,6 +5,7 @@
  * Date: 2019/3/28
  * Time: 10:55
  */
+
 namespace app\sign;
 
 use think\Config;
@@ -18,15 +19,15 @@ class SignatureAndVerification
     public static function sign_with_sha1_with_rsa($contentForSign)
     {
         $data = base64_encode($contentForSign);
-        $certs=array();
+        $certs = array();
         $filePath = 'static/resources/certificate/ailuobo.pfx';
         $keyPass = Config::get('prikey');//'11111111';
         $pkcs12 = file_get_contents($filePath);
-        if(openssl_pkcs12_read($pkcs12,$certs,$keyPass)){
+        if (openssl_pkcs12_read($pkcs12, $certs, $keyPass)) {
             $privateKey = $certs['pkey'];
 //            $publicKey =$certs['cert'];
             $signedMsg = '';
-            if(openssl_sign($data,$signedMsg,$privateKey)){
+            if (openssl_sign($data, $signedMsg, $privateKey)) {
                 $signedMsg = base64_encode(($signedMsg));
                 return $signedMsg;
             }
@@ -41,16 +42,17 @@ class SignatureAndVerification
      * $signature 加签字符串
      * 返回值 1：验签成功
      */
-    public static function  read_cer_and_verify_sign($contentBody, $signature)
+    public static function read_cer_and_verify_sign($contentBody, $signature)
     {
         $filePath = 'static/resources/certificate/TrustPayTest.cer';
         $certificateCAcerContent = file_get_contents($filePath);
-        $certificateCApemContent = '-----BEGIN CERTIFICATE-----'.PHP_EOL
-            .chunk_split(base64_encode($certificateCAcerContent),64,PHP_EOL)
-            .'-----END CERTIFICATE-----'.PHP_EOL;
+        Log::info('certificateCAcerContent:' . $certificateCAcerContent);
+        $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
+            . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL)
+            . '-----END CERTIFICATE-----' . PHP_EOL;
         $key = openssl_get_publickey($certificateCApemContent);
 
-        $ok = (bool)openssl_verify($contentBody,base64_decode($signature),$key);
+        $ok = (bool)openssl_verify($contentBody, base64_decode($signature), $key);
         openssl_free_key($key);
         return $ok;
     }

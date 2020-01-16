@@ -146,8 +146,6 @@ class QueryBillOtherRules extends Controller
         $requestBody = $requestMap['requestBody'];
         //获取缴费中心传送过来的签名
         $signatureString = $requestMap['signatureString'];
-        Log::info("requestBody：" . $requestBody);
-        Log::info("signatureString：" . $signatureString);
         $result = (string)SignatureAndVerification::read_cer_and_verify_sign($requestBody, $signatureString);
         Log::info("获取到的报文验签的结果为：" . $result);
         if ('1' !== $result) {
