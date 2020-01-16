@@ -1,0 +1,37 @@
+---------------------------------------------------------------
+[2020-01-16T10:20:26+08:00] 127.0.0.1 POST nonghang.com/merchantsend/confirm_trace/confirm
+[ info ] http://10.233.93.55:8888/jf-openapiweb/bridgeTrans/confirmTrace向后台发送的报文加密前为：{"format":"json","message":{"info":{"merchantId":"1","traceNo":"1"},"head":{"transSeqNum":"BRIDGE202001161019265431","transCode":"confirmTrace","transFlag":"01","timestamp":null,"timeStamp":"20200116101926543"}}}
+[ info ] http://10.233.93.55:8888/jf-openapiweb/bridgeTrans/confirmTrace向后台发送的报文加密后为：TU++1oUdBHwZwCaw5uPiwbFNwg23WbwGT+W1Jog8qkE78lhjW2c4nwZ32bPGDUI7w17QKTbHLKcwHQBEg3VsobRhSw4DiwPriOpHZmvtQ6/qDQqEGKUmJtTRA6jt0inKQyG2FRQ/XxE9u3eV5Lh6zyqCQNe4oL7i+LE5m85TQxc=||eyJmb3JtYXQiOiJqc29uIiwibWVzc2FnZSI6eyJpbmZvIjp7Im1lcmNoYW50SWQiOiIxIiwidHJhY2VObyI6IjEifSwiaGVhZCI6eyJ0cmFuc1NlcU51bSI6IkJSSURHRTIwMjAwMTE2MTAxOTI2NTQzMSIsInRyYW5zQ29kZSI6ImNvbmZpcm1UcmFjZSIsInRyYW5zRmxhZyI6IjAxIiwidGltZXN0YW1wIjpudWxsLCJ0aW1lU3RhbXAiOiIyMDIwMDExNjEwMTkyNjU0MyJ9fX0=
+[ info ] NULL
+---------------------------------------------------------------
+[2020-01-16T10:20:28+08:00] 127.0.0.1 POST nonghang.com/merchantsend/confirm_trace/confirm
+[ info ] http://10.233.93.55:8888/jf-openapiweb/bridgeTrans/confirmTrace向后台发送的报文加密前为：{"format":"json","message":{"info":{"merchantId":"1","traceNo":"1"},"head":{"transSeqNum":"BRIDGE202001161019282551","transCode":"confirmTrace","transFlag":"01","timestamp":null,"timeStamp":"20200116101928255"}}}
+[ info ] http://10.233.93.55:8888/jf-openapiweb/bridgeTrans/confirmTrace向后台发送的报文加密后为：nKs2fsdIrTmckwHhOlm18hVqppI9KVZQ3wPrK2yhtUgXDXb9b5B5mpArAyvID+jFIbEHnRPocUxylKJXH7CwEL10mHpNOxAHbgytkMIEokLwUFmRqmXIlAjLt6G0QoXG0XsaaoC9aWSuSlS2swBcSnLAJitTXDTdVXo4/DMyoHg=||eyJmb3JtYXQiOiJqc29uIiwibWVzc2FnZSI6eyJpbmZvIjp7Im1lcmNoYW50SWQiOiIxIiwidHJhY2VObyI6IjEifSwiaGVhZCI6eyJ0cmFuc1NlcU51bSI6IkJSSURHRTIwMjAwMTE2MTAxOTI4MjU1MSIsInRyYW5zQ29kZSI6ImNvbmZpcm1UcmFjZSIsInRyYW5zRmxhZyI6IjAxIiwidGltZXN0YW1wIjpudWxsLCJ0aW1lU3RhbXAiOiIyMDIwMDExNjEwMTkyODI1NSJ9fX0=
+[ info ] NULL
+---------------------------------------------------------------
+[2020-01-16T10:20:36+08:00] 127.0.0.1 POST nonghang.com/merchantsend/confirm_trace/confirm
+[ info ] http://10.233.93.55:8888/jf-openapiweb/bridgeTrans/confirmTrace向后台发送的报文加密前为：{"format":"json","message":{"info":{"merchantId":"1","traceNo":"1"},"head":{"transSeqNum":"BRIDGE202001161019361501","transCode":"confirmTrace","transFlag":"01","timestamp":null,"timeStamp":"20200116101936150"}}}
+[ info ] http://10.233.93.55:8888/jf-openapiweb/bridgeTrans/confirmTrace向后台发送的报文加密后为：aXTFl8n+X7A9EPkgoiZhk6DVxwfnypxINTbz/XG8Va4LUAPviKeVJ2MbPWynefVvLodHI/iSo3dbuKeVRUEsddFw8J4DiCelJesk60jIFBi+1YKAic2mqidVTL3Le6jW/8JT7/IA7uPsQWxkWtvObzKqpTWVKLZg1haOf2bGO/o=||eyJmb3JtYXQiOiJqc29uIiwibWVzc2FnZSI6eyJpbmZvIjp7Im1lcmNoYW50SWQiOiIxIiwidHJhY2VObyI6IjEifSwiaGVhZCI6eyJ0cmFuc1NlcU51bSI6IkJSSURHRTIwMjAwMTE2MTAxOTM2MTUwMSIsInRyYW5zQ29kZSI6ImNvbmZpcm1UcmFjZSIsInRyYW5zRmxhZyI6IjAxIiwidGltZXN0YW1wIjpudWxsLCJ0aW1lU3RhbXAiOiIyMDIwMDExNjEwMTkzNjE1MCJ9fX0=
+[ info ] NULL
+---------------------------------------------------------------
+[2020-01-16T10:29:20+08:00] 127.0.0.1 POST nonghang.com/merchantreceive/QueryBillOtherRules/rule3
+[ info ] 后台获取的报文解密前为：
+[ error ] [8]未定义变量: php_errormsg
+---------------------------------------------------------------
+[2020-01-16T10:29:38+08:00] 127.0.0.1 GET nonghang.com/merchantreceive/QueryBillOtherRules/rule3
+[ info ] 后台获取的报文解密前为：
+[ error ] [8]未定义变量: php_errormsg
+---------------------------------------------------------------
+[2020-01-16T10:30:30+08:00] 127.0.0.1 GET nonghang.com/merchantreceive/QueryBillOtherRules/rule3
+[ info ] 后台获取的报文解密前为：
+[ error ] [8]未定义变量: php_errormsg
+---------------------------------------------------------------
+[2020-01-16T10:30:48+08:00] 127.0.0.1 GET nonghang.com/merchantreceive/QueryBillOtherRules/rule3
+[ info ] 后台获取的报文解密前为：
+[ error ] [8]未定义变量: php_errormsg
+---------------------------------------------------------------
+[2020-01-16T11:03:47+08:00] 127.0.0.1 GET nonghang.com/pay/bill/search
+[ error ] [0]致命错误: Class 'Route' not found
+---------------------------------------------------------------
+[2020-01-16T11:04:35+08:00] 127.0.0.1 GET nonghang.com/merchantreceive/bill/search
+[ error ] [0]致命错误: Class 'Route' not found
