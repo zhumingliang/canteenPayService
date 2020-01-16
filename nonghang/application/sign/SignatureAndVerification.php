@@ -46,7 +46,6 @@ class SignatureAndVerification
     {
         $filePath = 'static/resources/certificate/TrustPayTest.cer';
         $certificateCAcerContent = file_get_contents($filePath);
-        Log::info('certificateCAcerContent:' . $certificateCAcerContent);
         $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
             . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL)
             . '-----END CERTIFICATE-----' . PHP_EOL;
