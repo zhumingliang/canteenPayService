@@ -186,7 +186,7 @@ class QueryBillOtherRules extends Controller
 //                $respBill->setDescDetails($respDescDetail);
 
 //             封装info内部类bill，并将其转化为array形式封装给info
-//                $respBill->setOweAmt("50.02");
+                $respBill->setOweAmt("0.00");
                 $respBill->setBillNo( $orderNum);
                 $respBill->setBillName("饭卡充值");
 //                $respBill->setFeeAmt("0.00");
