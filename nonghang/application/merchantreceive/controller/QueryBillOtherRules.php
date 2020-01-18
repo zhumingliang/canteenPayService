@@ -189,7 +189,7 @@ class QueryBillOtherRules extends Controller
                 $respBill->setOweAmt("0.00");
                 $respBill->setBillNo( $orderNum);
                 $respBill->setBillName("饭卡充值");
-//                $respBill->setFeeAmt("0.00");
+                $respBill->setFeeAmt("0.00");
 //                $respBill->setExpireDate("20230731");
 //                $respBill->setMinAmt("0.00");
 //                $respBill->setBalance("50.00");
@@ -296,7 +296,7 @@ class QueryBillOtherRules extends Controller
 //            $respBill->setUnitDetail($unitDetail);
             //      封装info内部类bill，并将其转化为array形式封装给info
 
-            $respBill->setOweAmt("1.00");
+            $respBill->setOweAmt("0.00");
             $respBill->setBillNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
             $respBill->setBillName("凯盛家园电费缴纳");
             $respBill->setFeeAmt("0.00");
@@ -315,7 +315,7 @@ class QueryBillOtherRules extends Controller
             $unitDetail1 = new QueryBillResponseInfo\UnitDetail("unitName", "6.66", "1");
             $respBill1->setUnitDetail($unitDetail1);
             //      封装info内部类bill，并将其转化为array形式封装给info
-            $respBill1->setOweAmt("2.00");
+            $respBill1->setOweAmt("0.00");
             $respBill1->setBillNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
             $respBill1->setBillName("北京市海淀区唐家岭新城T05区2号楼1单元1301");
             $respBill1->setFeeAmt("0.00");
