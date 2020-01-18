@@ -12,6 +12,7 @@ use app\beans\Body;
 use app\beans\Message;
 use app\beans\QueryBillResponseHead;
 use app\beans\QueryBillResponseInfo;
+use app\merchantreceive\service\OrderService;
 use app\merchantreceive\service\UserService;
 use app\sign\SignatureAndVerification;
 use app\utils\HttpClientUtils;
@@ -100,8 +101,7 @@ class QueryBillOtherRules extends Controller
 
             $respInfo->setTotalBillCount('1');
             $respInfo->setBills($respBills);
-
-//       封装响应的消息头信息
+            //封装响应的消息头信息
             $respHead->setTransSeqNum($requestBodyOfDecoded->message->head->transSeqNum);
             $respHead->setTransCode($requestBodyOfDecoded->message->head->transCode);
             $respHead->setChannel($requestBodyOfDecoded->message->head->channel);
@@ -144,88 +144,87 @@ class QueryBillOtherRules extends Controller
         $result = (string)SignatureAndVerification::read_cer_and_verify_sign($requestBody, $signatureString);
         if ('1' !== $result) {
             $responseStr = '验签失败！';
-            $this->returnToService($responseStr);
         } else {
             //检测用户是否存在
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
-            Log::info('1111111');
             $check = (new UserService())->checkUser($epayCode, $phone);
             if ($check['code']) {
-                $this->returnToService($check['msg']);
+                $responseStr = $check['msg'];
+            } else {
+                //保存信息
+                $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id']);
+                $respHead = new QueryBillResponseHead();
+                $respInfo = new QueryBillResponseInfo();
+                $respBill = new QueryBillResponseInfo\Bill();
+
+                //      封装info信息
+                $respInfo->setEpayCode($epayCode);
+                $respInfo->setMerchantId(isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "");
+                $respInfo->setTraceNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
+                $respInfo->setInput1($phone);
+//                $respInfo->setInput2(isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "");
+//                $respInfo->setInput3(isset($requestBodyOfDecoded->message->info->input3) ? $requestBodyOfDecoded->message->info->input3 : "");
+//                $respInfo->setInput4(isset($requestBodyOfDecoded->message->info->input4) ? $requestBodyOfDecoded->message->info->input4 : "");
+//                $respInfo->setInput5(isset($requestBodyOfDecoded->message->info->input5) ? $requestBodyOfDecoded->message->info->input5 : "");
+//                $respInfo->setCustName($check['username']);
+//                $respInfo->setCustAddress("北京海淀区温泉凯盛家园1区1号楼2单元999室");
+//                $respInfo->setCacheMem("0,0.00,S,张三丰,4340152");
+                $respInfo->setRemark("备注信息为空");
+                $respInfo->setAmtRule('3');
+//                $respInfo->setCallBackUrl("d3d3LmFiY2hpbmEuY29tL2NuLw==");
+//                $respInfo->setCallBackText("中国农业银行官网");
+
+                //      封装info内部类bill内部的descDtail
+//                $descDtail1 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
+//                $descDtail2 = new QueryBillResponseInfo\DescDetail("供电局编号:", "4340152");
+//                $descDtail3 = new QueryBillResponseInfo\DescDetail("欠费金额:", "50.02元");
+//                $descDtail4 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
+//                $descDtail5 = new QueryBillResponseInfo\DescDetail("服务时间:", "每天0:30-23:30期间均可缴费");
+//                $descDtail6 = new QueryBillResponseInfo\DescDetail("温馨提示:", "北京电力电费代缴，咨询电话：95598 该用户为：预付费用户");
+//                $respDescDetail = array($descDtail1, $descDtail2, $descDtail3, $descDtail4, $descDtail5, $descDtail6);
+//                $respBill->setDescDetails($respDescDetail);
+
+//             封装info内部类bill，并将其转化为array形式封装给info
+//                $respBill->setOweAmt("50.02");
+                $respBill->setBillNo( $orderNum);
+                $respBill->setBillName("饭卡充值");
+//                $respBill->setFeeAmt("0.00");
+//                $respBill->setExpireDate("20230731");
+//                $respBill->setMinAmt("0.00");
+//                $respBill->setBalance("50.00");
+                $respBills = array($respBill);
+
+                $respInfo->setTotalBillCount('1');
+                $respInfo->setBills($respBills);
+
+                //       封装响应的消息头信息
+                $respHead->setTransSeqNum($requestBodyOfDecoded->message->head->transSeqNum);
+                $respHead->setTransCode($requestBodyOfDecoded->message->head->transCode);
+                $respHead->setChannel($requestBodyOfDecoded->message->head->channel);
+
+                $respHead->setTransFlag("02");
+                $respHead->setTimeStamp(TimeUtils::getTimeStamp('YmdHisu'));
+                $respHead->setReturnCode("0000");
+                $respHead->setReturnMessage("账单查询成功，返回成功标志");
+
+                $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
+                $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
+                $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);;
+                // 加签名
+                $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
+                $responseStr = $signatrue . "||" . (base64_encode($responseJson));
+                //Log::info("向后台发送的报文加密前为：" . $responseJson);
+
             }
-            //保存信息
-            Log::info('222222222');
-            $respHead = new QueryBillResponseHead();
-            $respInfo = new QueryBillResponseInfo();
-            $respBill = new QueryBillResponseInfo\Bill();
 
-            //      封装info信息
-            $respInfo->setEpayCode($epayCode);
-            $respInfo->setMerchantId(isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "");
-            $respInfo->setTraceNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
-            $respInfo->setInput1($phone);
-            $respInfo->setInput2(isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "");
-            $respInfo->setInput3(isset($requestBodyOfDecoded->message->info->input3) ? $requestBodyOfDecoded->message->info->input3 : "");
-            $respInfo->setInput4(isset($requestBodyOfDecoded->message->info->input4) ? $requestBodyOfDecoded->message->info->input4 : "");
-            $respInfo->setInput5(isset($requestBodyOfDecoded->message->info->input5) ? $requestBodyOfDecoded->message->info->input5 : "");
-            $respInfo->setCustName("张三丰");
-            $respInfo->setCustAddress("北京海淀区温泉凯盛家园1区1号楼2单元999室");
-            $respInfo->setCacheMem("0,0.00,S,张三丰,4340152");
-            $respInfo->setRemark("备注信息为空");
-            $respInfo->setAmtRule('3');
-            $respInfo->setCallBackUrl("d3d3LmFiY2hpbmEuY29tL2NuLw==");
-            $respInfo->setCallBackText("中国农业银行官网");
-
-            //      封装info内部类bill内部的descDtail
-            $descDtail1 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
-            $descDtail2 = new QueryBillResponseInfo\DescDetail("供电局编号:", "4340152");
-            $descDtail3 = new QueryBillResponseInfo\DescDetail("欠费金额:", "50.02元");
-            $descDtail4 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
-            $descDtail5 = new QueryBillResponseInfo\DescDetail("服务时间:", "每天0:30-23:30期间均可缴费");
-            $descDtail6 = new QueryBillResponseInfo\DescDetail("温馨提示:", "北京电力电费代缴，咨询电话：95598 该用户为：预付费用户");
-            $respDescDetail = array($descDtail1, $descDtail2, $descDtail3, $descDtail4, $descDtail5, $descDtail6);
-            $respBill->setDescDetails($respDescDetail);
-
-//      封装info内部类bill，并将其转化为array形式封装给info
-
-            $respBill->setOweAmt("50.02");
-            $respBill->setBillNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
-            $respBill->setBillName("凯盛家园电费缴纳");
-            $respBill->setFeeAmt("0.00");
-            $respBill->setExpireDate("20230731");
-            $respBill->setMinAmt("0.00");
-//            $respBill->setMaxAmt("0.03");
-            $respBill->setBalance("50.00");
-            $respBills = array($respBill);
-
-            $respInfo->setTotalBillCount('1');
-            $respInfo->setBills($respBills);
-
-            //       封装响应的消息头信息
-            $respHead->setTransSeqNum($requestBodyOfDecoded->message->head->transSeqNum);
-            $respHead->setTransCode($requestBodyOfDecoded->message->head->transCode);
-            $respHead->setChannel($requestBodyOfDecoded->message->head->channel);
-
-            $respHead->setTransFlag("02");
-            $respHead->setTimeStamp(TimeUtils::getTimeStamp('YmdHisu'));
-            $respHead->setReturnCode("0000");
-            $respHead->setReturnMessage("账单查询成功，返回成功标志");
-
-            $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
-            $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
-            $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);;
-            // 加签名
-            $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
-            $responseStr = $signatrue . "||" . (base64_encode($responseJson));
-            //Log::info("向后台发送的报文加密前为：" . $responseJson);
         }
+        $this->returnToService($responseStr);
     }
 
     //将消息返回给农行服务
     public function returnToService($responseStr)
     {
-        Log::info('333333333');
         $httpresp = new Response();
         $httpresp->contentType('text/plain', 'utf-8');
         $httpresp->data($responseStr);

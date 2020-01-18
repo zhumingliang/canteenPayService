@@ -25,7 +25,7 @@ class UserService
             ];
         }
         //查询用户是否存在
-        $staff = CompanyStaffT::where('c_id', $company)
+        $staff = CompanyStaffT::where('c_id', $company->id)
             ->where('phone', $phone)
             ->where('state', 1)
             ->find();
@@ -38,8 +38,10 @@ class UserService
         return [
             'code' => 0,
             'msg' => 'success',
-            'staff_id' => $staff->id
-        ];;
+            'staff_id' => $staff->id,
+            'company_id' => $company->id,
+            'username'=>$staff->username
+        ];
 
     }
 
