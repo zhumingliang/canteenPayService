@@ -11,12 +11,6 @@ class UserService
 {
     public function checkUser($epay_code, $phone)
     {
-        if (empty($epayCode) || empty($phone)) {
-            return [
-                'code' => 1,
-                'msg' => '请求数据缺失'
-            ];
-        }
         $company = CompanyT::where('epay_code', '=', $epay_code)->find();
         if (empty($company)) {
             return [

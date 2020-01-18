@@ -148,8 +148,6 @@ class QueryBillOtherRules extends Controller
             //检测用户是否存在
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
-            Log::info($epayCode);
-            Log::info($phone);
             $check = (new UserService())->checkUser($epayCode, $phone);
             if ($check['code']) {
                 $responseStr = $check['msg'];
