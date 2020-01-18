@@ -151,7 +151,7 @@ class QueryBillOtherRules extends Controller
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
             Log::info('1111111');
             $check = (new UserService())->checkUser($epayCode, $phone);
-            if (!$check['code']) {
+            if ($check['code']) {
                 $this->returnToService($check['msg']);
             }
             //保存信息
@@ -225,6 +225,7 @@ class QueryBillOtherRules extends Controller
     //将消息返回给农行服务
     public function returnToService($responseStr)
     {
+        Log::info('333333333');
         $httpresp = new Response();
         $httpresp->contentType('text/plain', 'utf-8');
         $httpresp->data($responseStr);

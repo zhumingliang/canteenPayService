@@ -13,14 +13,14 @@ class UserService
     {
         if (empty($epayCode) || empty($phone)) {
             return [
-                'code' => -1,
+                'code' => 1,
                 'msg' => '请求数据缺失'
             ];
         }
         $company = CompanyT::where('epay_code', '=', $epay_code)->find();
         if (empty($company)) {
             return [
-                'code' => -1,
+                'code' => 1,
                 'msg' => '企业不存在'
             ];
         }
@@ -31,11 +31,15 @@ class UserService
             ->find();
         if (empty($staff)) {
             return [
-                'code' => -1,
+                'code' => 1,
                 'msg' => '用户不存在'
             ];
         }
-        return $staff->id;
+        return [
+            'code' => 0,
+            'msg' => 'success',
+            'staff_id' => $staff->id
+        ];;
 
     }
 
