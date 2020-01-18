@@ -13,7 +13,6 @@ class OrderService
     {
         //1.添加记录
         PayNonghangT::create([
-            'staff_id' => $staff_id,
             'epay_code' => $epayCode,
             'phone' => $phone,
             'trace_no' => isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "",
