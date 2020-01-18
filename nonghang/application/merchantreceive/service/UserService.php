@@ -20,7 +20,7 @@ class UserService
         $company = CompanyT::where('epay_code', '=', $epay_code)->find();
         if (empty($company)) {
             return [
-                'code' => 1,
+                'code' => 2,
                 'msg' => '企业不存在'
             ];
         }
@@ -31,7 +31,7 @@ class UserService
             ->find();
         if (empty($staff)) {
             return [
-                'code' => 1,
+                'code' => 3,
                 'msg' => '用户不存在'
             ];
         }
