@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: marui
+ * UserService: marui
  * Date: 2019/4/8
  * Time: 17:02
  */
@@ -21,11 +21,6 @@ use think\Log;
 
 class QueryBillOtherRules extends Controller
 {
-
-    public function test()
-    {
-        echo 1;
-    }
 
 
     /**
@@ -139,7 +134,6 @@ class QueryBillOtherRules extends Controller
     {
         $util = new HttpClientUtils();
         $requestMap = $util->requestBodyOfBase64();
-
         //使用base64解析完成后的requestBody
         $requestBodyOfDecoded = $requestMap['requestBodyOfDecoded'];
         //解析前的requestBody
@@ -147,11 +141,12 @@ class QueryBillOtherRules extends Controller
         //获取缴费中心传送过来的签名
         $signatureString = $requestMap['signatureString'];
         $result = (string)SignatureAndVerification::read_cer_and_verify_sign($requestBody, $signatureString);
-        Log::info("获取到的报文验签的结果为：" . $result);
         if ('1' !== $result) {
             $responseStr = '验签失败！';
-        }
-        else {
+        } else {
+            //检测用户是否存在
+
+            Log::info("数据：" . $requestMap['requestBodyOfDecoded']);
 
             $respHead = new QueryBillResponseHead();
             $respInfo = new QueryBillResponseInfo();
@@ -217,13 +212,15 @@ class QueryBillOtherRules extends Controller
             $responseStr = $signatrue . "||" . (base64_encode($responseJson));
             Log::info("向后台发送的报文加密前为：" . $responseJson);
         }
-        Log::info("向后台发送的报文加密后为：" . $responseStr);
 //      将加签名之后的报文发送给浏览器
         $httpresp = new Response();
         $httpresp->contentType('text/plain', 'utf-8');
         $httpresp->data($responseStr);
         $httpresp->send();
     }
+
+
+
     // ************************************单账单情景end*****************************************************************************************
     // ************************************多账单情景begin*****************************************************************************************
 
