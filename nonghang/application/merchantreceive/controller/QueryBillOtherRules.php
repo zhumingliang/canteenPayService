@@ -12,6 +12,7 @@ use app\beans\Body;
 use app\beans\Message;
 use app\beans\QueryBillResponseHead;
 use app\beans\QueryBillResponseInfo;
+use app\merchantreceive\service\UserService;
 use app\sign\SignatureAndVerification;
 use app\utils\HttpClientUtils;
 use app\utils\TimeUtils;
@@ -143,20 +144,27 @@ class QueryBillOtherRules extends Controller
         $result = (string)SignatureAndVerification::read_cer_and_verify_sign($requestBody, $signatureString);
         if ('1' !== $result) {
             $responseStr = '验签失败！';
+            $this->returnToService($responseStr);
         } else {
             //检测用户是否存在
-
-            Log::info("数据：" . $requestMap['requestBodyOfDecoded']);
-
+            $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
+            $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
+            Log::info('1111111');
+            $check = (new UserService())->checkUser($epayCode, $phone);
+            if (!$check['code']) {
+                $this->returnToService($check['msg']);
+            }
+            //保存信息
+            Log::info('222222222');
             $respHead = new QueryBillResponseHead();
             $respInfo = new QueryBillResponseInfo();
             $respBill = new QueryBillResponseInfo\Bill();
 
             //      封装info信息
-            $respInfo->setEpayCode(isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "");
+            $respInfo->setEpayCode($epayCode);
             $respInfo->setMerchantId(isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "");
             $respInfo->setTraceNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
-            $respInfo->setInput1(isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "");
+            $respInfo->setInput1($phone);
             $respInfo->setInput2(isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "");
             $respInfo->setInput3(isset($requestBodyOfDecoded->message->info->input3) ? $requestBodyOfDecoded->message->info->input3 : "");
             $respInfo->setInput4(isset($requestBodyOfDecoded->message->info->input4) ? $requestBodyOfDecoded->message->info->input4 : "");
@@ -210,9 +218,13 @@ class QueryBillOtherRules extends Controller
             // 加签名
             $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
             $responseStr = $signatrue . "||" . (base64_encode($responseJson));
-            Log::info("向后台发送的报文加密前为：" . $responseJson);
+            //Log::info("向后台发送的报文加密前为：" . $responseJson);
         }
-//      将加签名之后的报文发送给浏览器
+    }
+
+    //将消息返回给农行服务
+    public function returnToService($responseStr)
+    {
         $httpresp = new Response();
         $httpresp->contentType('text/plain', 'utf-8');
         $httpresp->data($responseStr);
