@@ -6,7 +6,7 @@ namespace app\merchantreceive\model;
 
 use think\Model;
 
-class NonghangPayT extends Model
+class PayNonghangT extends Model
 {
 
 }

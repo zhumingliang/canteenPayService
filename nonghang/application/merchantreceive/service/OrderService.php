@@ -4,7 +4,7 @@
 namespace app\merchantreceive\service;
 
 
-use app\merchantreceive\model\NonghangPayT;
+use app\merchantreceive\model\PayNonghangT;
 use app\merchantreceive\model\PayT;
 
 class OrderService
@@ -12,7 +12,7 @@ class OrderService
     public function saveOrder($requestBodyOfDecoded, $staff_id, $epayCode, $phone, $company_id)
     {
         //1.添加记录
-        NonghangPayT::create([
+        PayNonghangT::create([
             'staff_id' => $staff_id,
             'epay_code' => $epayCode,
             'phone' => $phone,

@@ -149,6 +149,7 @@ class QueryBillOtherRules extends Controller
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
             $check = (new UserService())->checkUser($epayCode, $phone);
+            Log::info(json_encode($check));
             if ($check['code']) {
                 $responseStr = $check['msg'];
             } else {
