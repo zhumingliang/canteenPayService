@@ -176,14 +176,14 @@ class HttpClientUtils extends Controller
     {
         try {
             $requestContent = \request()->getInput();
-           // Log::info("后台获取的报文解密前为：" . $requestContent);
+            Log::info("后台获取的报文解密前为：" . $requestContent);
 //            $requestContent = "k6lECy5TcFx9SNniGM8xg94ZeocFBOIp8xF1wJg817gcBYuN6UHssjwr0/U5W2D1XZIRXJHQkgfluQ2qzZhDl5eiOyHpNgbxR0I/QYxUokaZy3XnSAjCi+uv6O6gti5MCnFs3ZP1l4cKdJrKMPaZowoQKR0aeUUFc3zWTH3LTcg=||eyJmb3JtYXQiOiJqc29uIiwibWVzc2FnZSI6eyJoZWFkIjp7ImJyYW5jaENvZGUiOiIyMTEwIiwiY2hhbm5lbCI6Ik1CTksiLCJ0aW1lU3RhbXAiOiIyMDE4MDkyMTE1MTg0Nzg2NyIsInRyYW5zQ29kZSI6InF1ZXJ5QmlsbCIsInRyYW5zRmxhZyI6IjAxIiwidHJhbnNTZXFOdW0iOiJCUDE4MDkyMTE1MTg1NzM5MDAwOSJ9LCJpbmZvIjp7ImVwYXlDb2RlIjoiSkYtRVBBWTIwMTgwODAyNjU2MDIiLCJpbnB1dDEiOiIxMjM0NTYiLCJtZXJjaGFudElkIjoiMTAzODgxMTA0NDEwMDAxIiwidHJhY2VObyI6IkpGMTgwOTIxMTUxODU3ODQ4NTkyIiwidXNlcklkIjoiMTYzNzUwNDYwMjk5NDM1NiJ9fX0=";
             $resultArr = explode('||', $requestContent);
 
             $signatureString = $resultArr[0];
             $requestBody = $resultArr[1];
             $requestBodyOfDecoded = base64_decode($requestBody);
-           // Log::info("后台获取的报文解密后为：" . $requestBodyOfDecoded);
+            Log::info("后台获取的报文解密后为：" . $requestBodyOfDecoded);
             //使用base64解析完成后的requestBody
             $requestMap['requestBodyOfDecoded'] = json_decode($requestBodyOfDecoded);
             //解析前的requestBody

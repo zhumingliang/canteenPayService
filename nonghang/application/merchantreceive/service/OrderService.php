@@ -58,6 +58,7 @@ class OrderService
         if ($pay->status == 'paid_fail') {
             $pay->paid_at = time(); // 更新支付时间为当前时间
             $pay->status = 'paid';
+            $pay->money = $requestBodyOfDecoded->message->info->payBillAmt;
             $pay->save();
         }
 
