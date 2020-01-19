@@ -39,4 +39,29 @@ class OrderService
 
     }
 
+    public function orderHandel($requestBodyOfDecoded, $code)
+    {
+        //获取异步通知订单检测状态
+        $traceNo = $requestBodyOfDecoded->message->info->traceNo;
+        $nonghangOrder = PayNonghangT::where('trace_no', $traceNo)->find();
+        if ($nonghangOrder->state == 2 && $code == "0000") {
+            $nonghangOrder->state = 1;
+        }
+        $nonghangOrder->notify_content = json_encode($requestBodyOfDecoded);
+        $nonghangOrder->save();
+        //修改支付记录订单状态
+        if ($code != "0000") {
+            return false;
+        }
+        $orderNum = $requestBodyOfDecoded->message->info->payBillNo;
+        $pay = PayT::where('order_num', $orderNum)->find();
+        if ($pay->status == 'paid_fail') {
+            $pay->paid_at = time(); // 更新支付时间为当前时间
+            $pay->status = 'paid';
+            $pay->save();
+        }
+
+
+    }
+
 }

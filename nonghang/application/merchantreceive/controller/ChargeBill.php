@@ -13,6 +13,7 @@ use app\beans\Body;
 use app\beans\ChargeBillResponseHead;
 use app\beans\ChargeBillResponseInfo;
 use app\beans\Message;
+use app\merchantreceive\service\OrderService;
 use app\sign\SignatureAndVerification;
 use app\utils\HttpClientUtils;
 use app\utils\TimeUtils;
@@ -51,11 +52,8 @@ class ChargeBill
             $respHead->setTransFlag("02");
             $respHead->setTimeStamp(TimeUtils::getTimeStamp('YmdHisu'));
             $respHead->setChannel(isset($requestBodyOfDecoded->message->head->channel) ? $requestBodyOfDecoded->message->head->channel : "");
-            //        $respHead->setChannel("MBNK");
             $respHead->setTransCode(isset($requestBodyOfDecoded->message->head->transCode) ? $requestBodyOfDecoded->message->head->transCode : "");
-            //        $respHead->setTransCode("chargeBill");
             $respHead->setTransSeqNum(isset($requestBodyOfDecoded->message->head->transSeqNum) ? $requestBodyOfDecoded->message->head->transSeqNum : "");
-            //        $respHead->setReturnCode("1111");
 
 
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
@@ -96,10 +94,9 @@ class ChargeBill
             // 加签名
             $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
             $responseStr = $signatrue . "||" . (base64_encode($responseJson));
+            (new OrderService())->orderHandel($requestBodyOfDecoded, $respHead->getReturnCode());
 
-            Log::info("向后台发送的报文加密前为：" . $responseJson);
         }
-        Log::info("向后台发送的报文加密后为：" . $responseStr);
 //      将加签名之后的报文发送给浏览器
         $httpresp = new Response();
         $httpresp->contentType('text/plain', 'utf-8');
