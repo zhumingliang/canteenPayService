@@ -29,7 +29,7 @@ class OrderService
             'money' => 0,
             'order_num' => $orderNum,
             'method_id' => 2,
-            'status' => 2,
+            'status' => 'paid_fail',
             'state' => 1,
             'openid' => '',
             'staff_id' => $staff_id,
