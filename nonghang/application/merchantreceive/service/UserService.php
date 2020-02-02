@@ -6,6 +6,7 @@ namespace app\merchantreceive\service;
 
 use app\merchantreceive\model\CompanyStaffT;
 use app\merchantreceive\model\CompanyT;
+use app\merchantreceive\model\LogT;
 use app\merchantreceive\model\PayNonghangConfigT;
 use think\Config;
 
@@ -33,16 +34,18 @@ class UserService
         }
         //配置支付参数
         Config::set([
-            'prikey'=>$company->prikey,
-            'pfxName'=>$company->pfxName
+            'prikey' => $company->prikey,
+            'pfxName' => $company->pfxName
         ]);
 
+        LogT::create(['content'=> Config::get('pfxName')]);
+        LogT::create(['content'=> Config::get('prikey')]);
         return [
             'code' => 0,
             'msg' => 'success',
             'staff_id' => $staff->id,
             'company_id' => $company->id,
-            'username'=>$staff->username
+            'username' => $staff->username
         ];
 
     }
