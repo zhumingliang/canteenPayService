@@ -14,7 +14,8 @@ class UserService
 {
     public function checkUser($epay_code, $phone)
     {
-        $company = PayNonghangConfigT::where('code', '=', $epay_code)->find();
+        $company = PayNonghangConfigT::where('code', '=', $epay_code)
+            ->where('state', 1)->find();
         if (empty($company)) {
             return [
                 'code' => 2,
@@ -38,8 +39,8 @@ class UserService
             'pfxName' => $company->pfxName
         ]);
 
-        LogT::create(['content'=> Config::get('pfxName')]);
-        LogT::create(['content'=> Config::get('prikey')]);
+        LogT::create(['content' => Config::get('pfxName')]);
+        LogT::create(['content' => Config::get('prikey')]);
         return [
             'code' => 0,
             'msg' => 'success',

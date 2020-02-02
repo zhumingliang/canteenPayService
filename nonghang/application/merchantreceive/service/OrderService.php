@@ -55,14 +55,15 @@ class OrderService
         if ($code != "0000") {
             return false;
         }
-        $company = PayNonghangConfigT::where('code', '=', $nonghangOrder->epay_code)->find();
+        $company = PayNonghangConfigT::where('code', '=', $nonghangOrder->epay_code)
+            ->where('state', 1)->find();
         if (empty($company)) {
             return false;
         }
         //配置支付参数
         Config::set([
-            'prikey'=>$company->prikey,
-            'pfxName'=>$company->pfxName
+            'prikey' => $company->prikey,
+            'pfxName' => $company->pfxName
         ]);
 
 
