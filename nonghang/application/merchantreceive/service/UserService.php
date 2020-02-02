@@ -22,7 +22,7 @@ class UserService
             ];
         }
         //查询用户是否存在
-        $staff = CompanyStaffT::where('company_id', $company->id)
+        $staff = CompanyStaffT::where('company_id', $company->company_id)
             ->where('phone', $phone)
             ->where('state', 1)
             ->find();
