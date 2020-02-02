@@ -63,7 +63,7 @@ class OrderService
         //配置支付参数
         Config::set([
             'prikey' => $company->prikey,
-            'pfxName' => $company->pfxName
+            'pfxName' => $company->pfx
         ]);
 
 
