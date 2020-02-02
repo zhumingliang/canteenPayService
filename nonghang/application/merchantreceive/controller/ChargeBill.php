@@ -91,10 +91,11 @@ class ChargeBill
             $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
             $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
             $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);
+            //处理订单
+            (new OrderService())->orderHandel($requestBodyOfDecoded, $respHead->getReturnCode());
             // 加签名
             $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
             $responseStr = $signatrue . "||" . (base64_encode($responseJson));
-            (new OrderService())->orderHandel($requestBodyOfDecoded, $respHead->getReturnCode());
 
         }
 //      将加签名之后的报文发送给浏览器

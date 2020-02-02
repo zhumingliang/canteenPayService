@@ -6,12 +6,14 @@ namespace app\merchantreceive\service;
 
 use app\merchantreceive\model\CompanyStaffT;
 use app\merchantreceive\model\CompanyT;
+use app\merchantreceive\model\PayNonghangConfigT;
+use think\Config;
 
 class UserService
 {
     public function checkUser($epay_code, $phone)
     {
-        $company = CompanyT::where('epay_code', '=', $epay_code)->find();
+        $company = PayNonghangConfigT::where('code', '=', $epay_code)->find();
         if (empty($company)) {
             return [
                 'code' => 2,
@@ -29,6 +31,12 @@ class UserService
                 'msg' => '用户不存在'
             ];
         }
+        //配置支付参数
+        Config::set([
+            'prikey'=>$company->prikey,
+            'pfxName'=>$company->pfxName
+        ]);
+
         return [
             'code' => 0,
             'msg' => 'success',

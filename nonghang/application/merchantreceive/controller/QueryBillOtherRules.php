@@ -214,7 +214,6 @@ class QueryBillOtherRules extends Controller
                 // 加签名
                 $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
                 $responseStr = $signatrue . "||" . (base64_encode($responseJson));
-                //Log::info("向后台发送的报文加密前为：" . $responseJson);
 
             }
 

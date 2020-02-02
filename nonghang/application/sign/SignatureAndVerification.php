@@ -20,8 +20,9 @@ class SignatureAndVerification
     {
         $data = base64_encode($contentForSign);
         $certs = array();
-        $filePath = 'static/resources/certificate/ailuobo.pfx';
-        $keyPass = Config::get('prikey');//'11111111';
+        $pfxName = Config::get('pfxName');
+        $keyPass = Config::get('prikey');
+        $filePath = 'static/resources/certificate/' . $pfxName . '.pfx';
         $pkcs12 = file_get_contents($filePath);
         if (openssl_pkcs12_read($pkcs12, $certs, $keyPass)) {
             $privateKey = $certs['pkey'];

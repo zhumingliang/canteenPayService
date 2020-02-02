@@ -4,8 +4,10 @@
 namespace app\merchantreceive\service;
 
 
+use app\merchantreceive\model\PayNonghangConfigT;
 use app\merchantreceive\model\PayNonghangT;
 use app\merchantreceive\model\PayT;
+use think\Config;
 
 class OrderService
 {
@@ -53,6 +55,17 @@ class OrderService
         if ($code != "0000") {
             return false;
         }
+        $company = PayNonghangConfigT::where('code', '=', $nonghangOrder->epay_code)->find();
+        if (empty($company)) {
+            return false;
+        }
+        //配置支付参数
+        Config::set([
+            'prikey'=>$company->prikey,
+            'pfxName'=>$company->pfxName
+        ]);
+
+
         $orderNum = $requestBodyOfDecoded->message->info->payBillNo;
         $pay = PayT::where('order_num', $orderNum)->find();
         if ($pay->status == 'paid_fail') {

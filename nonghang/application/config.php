@@ -301,5 +301,6 @@ return [
 
     // 私钥密码
         'prikey' => '443727',
+        'pfxName' => 'ailuobotest',
 
 ];
