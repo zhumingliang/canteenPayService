@@ -32,6 +32,7 @@ class OrderService
             'order_num' => $orderNum,
             'method_id' => 2,
             'status' => 'paid_fail',
+            'type' => 'recharge',
             'state' => 1,
             'openid' => '',
             'staff_id' => $staff_id,

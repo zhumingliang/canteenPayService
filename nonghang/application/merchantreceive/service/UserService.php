@@ -39,8 +39,6 @@ class UserService
             'pfxName' => $company->pfx
         ]);
 
-        LogT::create(['content' => Config::get('pfxName')]);
-        LogT::create(['content' => Config::get('prikey')]);
         return [
             'code' => 0,
             'msg' => 'success',
