@@ -44,7 +44,8 @@ class UserService
             'msg' => 'success',
             'staff_id' => $staff->id,
             'company_id' => $company->company_id,
-            'username' => $staff->username
+            'username' => $staff->username,
+            'phone'=>$staff->phone
         ];
 
     }

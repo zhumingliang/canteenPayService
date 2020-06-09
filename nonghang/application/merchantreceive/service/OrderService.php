@@ -11,7 +11,7 @@ use think\Config;
 
 class OrderService
 {
-    public function saveOrder($requestBodyOfDecoded, $staff_id, $epayCode, $phone, $company_id)
+    public function saveOrder($requestBodyOfDecoded, $staff_id, $epayCode, $phone, $company_id,$username)
     {
         //1.添加记录
         PayNonghangT::create([
@@ -36,7 +36,9 @@ class OrderService
             'state' => 1,
             'openid' => '',
             'staff_id' => $staff_id,
-            'paid_at' => time()
+            'paid_at' => time(),
+            'username' => $username,
+            'phone' => $phone
         ]);
         return $orderNum;
 

@@ -153,7 +153,7 @@ class QueryBillOtherRules extends Controller
                 $responseStr = $check['msg'];
             } else {
                 //保存信息
-                $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id']);
+                $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'],$check['username']);
                 $respHead = new QueryBillResponseHead();
                 $respInfo = new QueryBillResponseInfo();
                 $respBill = new QueryBillResponseInfo\Bill();
