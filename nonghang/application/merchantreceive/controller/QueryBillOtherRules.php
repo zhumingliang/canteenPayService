@@ -154,7 +154,6 @@ class QueryBillOtherRules extends Controller
             $respInfo = new QueryBillResponseInfo();
             $respBill = new QueryBillResponseInfo\Bill();
             if ($check['code']) {
-                $orderNum =time();
                 $respHead->setReturnCode("JH02");
                 $respHead->setReturnMessage("未查到账单，请核实您的查询信息");
 
@@ -162,7 +161,10 @@ class QueryBillOtherRules extends Controller
                 $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'], $check['username']);
                 $respHead->setReturnCode("0000");
                 $respHead->setReturnMessage("账单查询成功，返回成功标志");
-
+                $respBill->setOweAmt("0.00");
+                $respBill->setBillNo($orderNum);
+                $respBill->setBillName("饭卡充值");
+                $respBill->setFeeAmt("0.00");
             }
 
             //      封装info信息
@@ -170,36 +172,9 @@ class QueryBillOtherRules extends Controller
             $respInfo->setMerchantId(isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "");
             $respInfo->setTraceNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
             $respInfo->setInput1($phone);
-//                $respInfo->setInput2(isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "");
-//                $respInfo->setInput3(isset($requestBodyOfDecoded->message->info->input3) ? $requestBodyOfDecoded->message->info->input3 : "");
-//                $respInfo->setInput4(isset($requestBodyOfDecoded->message->info->input4) ? $requestBodyOfDecoded->message->info->input4 : "");
-//                $respInfo->setInput5(isset($requestBodyOfDecoded->message->info->input5) ? $requestBodyOfDecoded->message->info->input5 : "");
-//                $respInfo->setCustName($check['username']);
-//                $respInfo->setCustAddress("北京海淀区温泉凯盛家园1区1号楼2单元999室");
-//                $respInfo->setCacheMem("0,0.00,S,张三丰,4340152");
             $respInfo->setRemark("备注信息为空");
             $respInfo->setAmtRule('3');
-//                $respInfo->setCallBackUrl("d3d3LmFiY2hpbmEuY29tL2NuLw==");
-//                $respInfo->setCallBackText("中国农业银行官网");
 
-            //      封装info内部类bill内部的descDtail
-//                $descDtail1 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
-//                $descDtail2 = new QueryBillResponseInfo\DescDetail("供电局编号:", "4340152");
-//                $descDtail3 = new QueryBillResponseInfo\DescDetail("欠费金额:", "50.02元");
-//                $descDtail4 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
-//                $descDtail5 = new QueryBillResponseInfo\DescDetail("服务时间:", "每天0:30-23:30期间均可缴费");
-//                $descDtail6 = new QueryBillResponseInfo\DescDetail("温馨提示:", "北京电力电费代缴，咨询电话：95598 该用户为：预付费用户");
-//                $respDescDetail = array($descDtail1, $descDtail2, $descDtail3, $descDtail4, $descDtail5, $descDtail6);
-//                $respBill->setDescDetails($respDescDetail);
-
-//             封装info内部类bill，并将其转化为array形式封装给info
-            $respBill->setOweAmt("0.00");
-            $respBill->setBillNo($orderNum);
-            $respBill->setBillName("饭卡充值");
-            $respBill->setFeeAmt("0.00");
-//                $respBill->setExpireDate("20230731");
-//                $respBill->setMinAmt("0.00");
-//                $respBill->setBalance("50.00");
             $respBills = array($respBill);
 
             $respInfo->setTotalBillCount('1');
