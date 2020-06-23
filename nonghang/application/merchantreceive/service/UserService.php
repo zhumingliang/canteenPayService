@@ -22,6 +22,11 @@ class UserService
                 'msg' => '企业不存在'
             ];
         }
+        //配置支付参数
+        Config::set([
+            'prikey' => $company->prikey,
+            'pfxName' => $company->pfx
+        ]);
         //查询用户是否存在
         $staff = CompanyStaffT::where('company_id', $company->company_id)
             ->where('phone', $phone)
@@ -33,11 +38,7 @@ class UserService
                 'msg' => '用户不存在'
             ];
         }
-        //配置支付参数
-        Config::set([
-            'prikey' => $company->prikey,
-            'pfxName' => $company->pfx
-        ]);
+
 
         return [
             'code' => 0,

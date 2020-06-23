@@ -156,8 +156,6 @@ class QueryBillOtherRules extends Controller
             if ($check['code']) {
                 $respHead->setReturnCode("JH02");
                 $respHead->setReturnMessage("未查到账单，请核实您的查询信息");
-                Log::info("error：" . $phone);
-
             } else {
                 $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'], $check['username']);
                 $respHead->setReturnCode("0000");
