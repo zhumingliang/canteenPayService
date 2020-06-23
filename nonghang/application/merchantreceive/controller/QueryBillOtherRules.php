@@ -165,6 +165,9 @@ class QueryBillOtherRules extends Controller
                 $respBill->setBillNo($orderNum);
                 $respBill->setBillName("饭卡充值");
                 $respBill->setFeeAmt("0.00");
+                $respBills = array($respBill);
+                $respInfo->setBills($respBills);
+                $respInfo->setTotalBillCount('1');
             }
 
             //      封装info信息
@@ -174,11 +177,6 @@ class QueryBillOtherRules extends Controller
             $respInfo->setInput1($phone);
             $respInfo->setRemark("备注信息为空");
             $respInfo->setAmtRule('3');
-
-            $respBills = array($respBill);
-
-            $respInfo->setTotalBillCount('1');
-            $respInfo->setBills($respBills);
 
             //       封装响应的消息头信息
             $respHead->setTransSeqNum($requestBodyOfDecoded->message->head->transSeqNum);
