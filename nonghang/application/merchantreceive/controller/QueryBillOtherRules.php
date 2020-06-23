@@ -149,20 +149,27 @@ class QueryBillOtherRules extends Controller
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
             $check = (new UserService())->checkUser($epayCode, $phone);
+            //保存信息
+            $respHead = new QueryBillResponseHead();
+            $respInfo = new QueryBillResponseInfo();
+            $respBill = new QueryBillResponseInfo\Bill();
             if ($check['code']) {
-                $responseStr = $check['msg'];
-            } else {
-                //保存信息
-                $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'],$check['username']);
-                $respHead = new QueryBillResponseHead();
-                $respInfo = new QueryBillResponseInfo();
-                $respBill = new QueryBillResponseInfo\Bill();
+                $orderNum =time();
+                $respHead->setReturnCode("JH02");
+                $respHead->setReturnMessage("未查到账单，请核实您的查询信息");
 
-                //      封装info信息
-                $respInfo->setEpayCode($epayCode);
-                $respInfo->setMerchantId(isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "");
-                $respInfo->setTraceNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
-                $respInfo->setInput1($phone);
+            } else {
+                $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'], $check['username']);
+                $respHead->setReturnCode("0000");
+                $respHead->setReturnMessage("账单查询成功，返回成功标志");
+
+            }
+
+            //      封装info信息
+            $respInfo->setEpayCode($epayCode);
+            $respInfo->setMerchantId(isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "");
+            $respInfo->setTraceNo(isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "");
+            $respInfo->setInput1($phone);
 //                $respInfo->setInput2(isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "");
 //                $respInfo->setInput3(isset($requestBodyOfDecoded->message->info->input3) ? $requestBodyOfDecoded->message->info->input3 : "");
 //                $respInfo->setInput4(isset($requestBodyOfDecoded->message->info->input4) ? $requestBodyOfDecoded->message->info->input4 : "");
@@ -170,12 +177,12 @@ class QueryBillOtherRules extends Controller
 //                $respInfo->setCustName($check['username']);
 //                $respInfo->setCustAddress("北京海淀区温泉凯盛家园1区1号楼2单元999室");
 //                $respInfo->setCacheMem("0,0.00,S,张三丰,4340152");
-                $respInfo->setRemark("备注信息为空");
-                $respInfo->setAmtRule('3');
+            $respInfo->setRemark("备注信息为空");
+            $respInfo->setAmtRule('3');
 //                $respInfo->setCallBackUrl("d3d3LmFiY2hpbmEuY29tL2NuLw==");
 //                $respInfo->setCallBackText("中国农业银行官网");
 
-                //      封装info内部类bill内部的descDtail
+            //      封装info内部类bill内部的descDtail
 //                $descDtail1 = new QueryBillResponseInfo\DescDetail("缴费月份:", "2018年6月份");
 //                $descDtail2 = new QueryBillResponseInfo\DescDetail("供电局编号:", "4340152");
 //                $descDtail3 = new QueryBillResponseInfo\DescDetail("欠费金额:", "50.02元");
@@ -186,36 +193,33 @@ class QueryBillOtherRules extends Controller
 //                $respBill->setDescDetails($respDescDetail);
 
 //             封装info内部类bill，并将其转化为array形式封装给info
-                $respBill->setOweAmt("0.00");
-                $respBill->setBillNo( $orderNum);
-                $respBill->setBillName("饭卡充值");
-                $respBill->setFeeAmt("0.00");
+            $respBill->setOweAmt("0.00");
+            $respBill->setBillNo($orderNum);
+            $respBill->setBillName("饭卡充值");
+            $respBill->setFeeAmt("0.00");
 //                $respBill->setExpireDate("20230731");
 //                $respBill->setMinAmt("0.00");
 //                $respBill->setBalance("50.00");
-                $respBills = array($respBill);
+            $respBills = array($respBill);
 
-                $respInfo->setTotalBillCount('1');
-                $respInfo->setBills($respBills);
+            $respInfo->setTotalBillCount('1');
+            $respInfo->setBills($respBills);
 
-                //       封装响应的消息头信息
-                $respHead->setTransSeqNum($requestBodyOfDecoded->message->head->transSeqNum);
-                $respHead->setTransCode($requestBodyOfDecoded->message->head->transCode);
-                $respHead->setChannel($requestBodyOfDecoded->message->head->channel);
+            //       封装响应的消息头信息
+            $respHead->setTransSeqNum($requestBodyOfDecoded->message->head->transSeqNum);
+            $respHead->setTransCode($requestBodyOfDecoded->message->head->transCode);
+            $respHead->setChannel($requestBodyOfDecoded->message->head->channel);
 
-                $respHead->setTransFlag("02");
-                $respHead->setTimeStamp(TimeUtils::getTimeStamp('YmdHisu'));
-                $respHead->setReturnCode("0000");
-                $respHead->setReturnMessage("账单查询成功，返回成功标志");
+            $respHead->setTransFlag("02");
+            $respHead->setTimeStamp(TimeUtils::getTimeStamp('YmdHisu'));
 
-                $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
-                $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
-                $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);;
-                // 加签名
-                $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
-                $responseStr = $signatrue . "||" . (base64_encode($responseJson));
+            $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
+            $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
+            $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);;
+            // 加签名
+            $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
+            $responseStr = $signatrue . "||" . (base64_encode($responseJson));
 
-            }
 
         }
         $this->returnToService($responseStr);
