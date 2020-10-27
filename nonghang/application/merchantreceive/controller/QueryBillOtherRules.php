@@ -148,14 +148,15 @@ class QueryBillOtherRules extends Controller
             //检测用户是否存在
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
-            $check = (new UserService())->checkUser($epayCode, $phone);
+            $username = isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "";
+            $check = (new UserService())->checkUser($epayCode, $phone,$username);
             //保存信息
             $respHead = new QueryBillResponseHead();
             $respInfo = new QueryBillResponseInfo();
             $respBill = new QueryBillResponseInfo\Bill();
             if ($check['code']) {
                 $respHead->setReturnCode("JH02");
-                $respHead->setReturnMessage("未查到您的信息，请核实您的手机号");
+                $respHead->setReturnMessage("未查到您的信息，请核实您的手机号和姓名");
             } else {
                 $orderNum = (new OrderService())->saveOrder($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'], $check['username']);
                 $respHead->setReturnCode("0000");

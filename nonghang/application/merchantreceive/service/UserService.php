@@ -12,7 +12,7 @@ use think\Config;
 
 class UserService
 {
-    public function checkUser($epay_code, $phone)
+    public function checkUser($epay_code, $phone, $username)
     {
         $company = PayNonghangConfigT::where('code', '=', $epay_code)
             ->where('state', 1)->find();
@@ -38,7 +38,12 @@ class UserService
                 'msg' => '用户不存在'
             ];
         }
-
+        if ($staff->username != $username) {
+            return [
+                'code' => 4,
+                'msg' => '用户名和手机号不匹配'
+            ];
+        }
 
         return [
             'code' => 0,
@@ -46,7 +51,7 @@ class UserService
             'staff_id' => $staff->id,
             'company_id' => $company->company_id,
             'username' => $staff->username,
-            'phone'=>$staff->phone
+            'phone' => $staff->phone
         ];
 
     }
