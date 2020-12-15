@@ -20,7 +20,7 @@ class Index
             throw  new ParameterException(['msg' => '缺少证书文件']);
         }
         $name = (new CerService())->save($cer);
-        return json(new SuccessMessageWithData(['data' => ['name' => $name]]));
+        return json(new SuccessMessageWithData(['data' => $name]));
 
     }
 }

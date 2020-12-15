@@ -14,7 +14,6 @@ class CerService
             mkdir(iconv("UTF-8", "GBK", $path), 0777, true);
         }
         $info = $cer->move($path);
-        $file_name = $info->getPathname();
-        return $file_name;
+        return ['url' => $info->getSaveName()];
     }
 }
