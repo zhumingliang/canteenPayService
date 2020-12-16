@@ -15,6 +15,7 @@ class CerService
         }*/
        // $info = $cer->move($path);
         $info= $cer->move('../static/resources/certificate/','');
+        var_dump($info);
         return ['url' => $info->getSaveName()];
     }
 }
