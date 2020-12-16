@@ -14,8 +14,7 @@ class CerService
             mkdir(iconv("UTF-8", "GBK", $path), 0777, true);
         }*/
        // $info = $cer->move($path);
-        $info= $cer->move('../static/resources/certificate/','');
-        var_dump($info);
+        $info= $cer->move('../public/static/resources/certificate/','');
         return ['url' => $info->getSaveName()];
     }
 }
