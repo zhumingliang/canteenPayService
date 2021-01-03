@@ -38,35 +38,40 @@ class NextMonthPayService
 
     public function getOrderConsumption($requestBodyOfDecoded, $staff_id, $epayCode, $phone, $company_id, $username, $pay_date)
     {
+        $orderNum = makeOrderNo();
         //查询缴费记录
         $dinnerStatistic = (new NextmonthPayT())->dinnerStatistic($pay_date, $company_id, $staff_id);
-        //添加记录
-        PayNonghangT::create([
-            'epay_code' => $epayCode,
-            'phone' => $phone,
-            'trace_no' => isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "",
-            'merchant_id' => isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "",
-            'user_id' => isset($requestBodyOfDecoded->message->info->userId) ? $requestBodyOfDecoded->message->info->userId : "",
-            'content' => json_encode($requestBodyOfDecoded),
-            'state' => 2
-        ]);
-        $orderNum = makeOrderNo();
-        //生成支付记录
-        $pay = PayT::create([
-            'company_id' => $company_id,
-            'u_id' => '',
-            'money' => 0,
-            'order_num' => $orderNum,
-            'method_id' => 2,
-            'status' => 'paid_fail',
-            'type' => 'recharge',
-            'state' => 1,
-            'openid' => '',
-            'staff_id' => $staff_id,
-            'paid_at' => time(),
-            'username' => $username,
-            'phone' => $phone
-        ]);
+        if(!empty($dinnerStatistic)){
+            //添加记录
+            PayNonghangT::create([
+                'epay_code' => $epayCode,
+                'phone' => $phone,
+                'trace_no' => isset($requestBodyOfDecoded->message->info->traceNo) ? $requestBodyOfDecoded->message->info->traceNo : "",
+                'merchant_id' => isset($requestBodyOfDecoded->message->info->merchantId) ? $requestBodyOfDecoded->message->info->merchantId : "",
+                'user_id' => isset($requestBodyOfDecoded->message->info->userId) ? $requestBodyOfDecoded->message->info->userId : "",
+                'content' => json_encode($requestBodyOfDecoded),
+                'state' => 2
+            ]);
+            //生成支付记录
+            $pay = PayT::create([
+                'company_id' => $company_id,
+                'u_id' => '',
+                'money' => 0,
+                'order_num' => $orderNum,
+                'method_id' => 2,
+                'status' => 'paid_fail',
+                'type' => 'recharge',
+                'state' => 1,
+                'openid' => '',
+                'staff_id' => $staff_id,
+                'paid_at' => time(),
+                'username' => $username,
+                'phone' => $phone
+            ]);
+        }
+        else{
+            $dinnerStatistic = [];
+        }
         return [
             'dinnerStatistic' => $dinnerStatistic,
             'order_num' => $orderNum

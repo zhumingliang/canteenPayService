@@ -52,9 +52,6 @@ class QueryBill extends Controller
             $epayCode = isset($requestBodyOfDecoded->message->info->epayCode) ? $requestBodyOfDecoded->message->info->epayCode : "";
             $phone = isset($requestBodyOfDecoded->message->info->input1) ? $requestBodyOfDecoded->message->info->input1 : "";
             $username = isset($requestBodyOfDecoded->message->info->input2) ? $requestBodyOfDecoded->message->info->input2 : "";
-//            $epayCode = "JF-EPAY2019062401722";
-//            $phone = "13686948977";
-//            $username = "覃美东";
             $check = (new UserService())->checkUser($epayCode, $phone, $username);
             //保存信息
             $respHead = new QueryBillResponseHead();
@@ -66,46 +63,52 @@ class QueryBill extends Controller
             } else {
                 //检测缴费年月是否小于当前月
                 $pay_date = isset($requestBodyOfDecoded->message->info->input3) ? $requestBodyOfDecoded->message->info->input3 : "";
-//                $pay_date = '2020-11';
                 $now_date = date("Y-m");
                 if (strtotime($pay_date) >= strtotime($now_date)) {
                     $respHead->setReturnCode("JH07");
                     $respHead->setReturnMessage("暂未查到欠费");
-                }
-                //检测是否在缴费时间
-                $company_id = $check['company_id'];
-                $isPay = (new NextMonthPayService())->isPay($company_id);
-                if ($isPay['code'] == 1) {
-                    $respHead->setReturnCode("JH04");
-                    $respHead->setReturnMessage("非服务时间");
-                }
-                //返回缴费账单
-                $dinnerStatistic = (new NextMonthPayService())->getOrderConsumption($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'], $check['username'], $pay_date);
-                $orderConsumption = $dinnerStatistic['dinnerStatistic'];
-                $allMoney = 0;
-                $respDescDetail = [];
-                for ($x = 0; $x <= count($orderConsumption); $x++) {
-                    if ($x <= count($orderConsumption) - 1) {
-                        $allMoney += $orderConsumption[$x]['order_money'];
-                        //      封装info内部类bill内部的descDtail
-                        $descDtail1 = new QueryBillResponseInfo\DescDetail($orderConsumption[$x]['dinner'] . "消费次数:", $orderConsumption[$x]['order_count']);
-                        $descDtail2 = new QueryBillResponseInfo\DescDetail($orderConsumption[$x]['dinner'] . "消费总额:", abs($orderConsumption[$x]['order_money']));
-                        array_push($respDescDetail, $descDtail1, $descDtail2);
+                } else {
+                    //检测是否在缴费时间
+                    $company_id = $check['company_id'];
+                    $isPay = (new NextMonthPayService())->isPay($company_id);
+                    if ($isPay['code'] == 1) {
+                        $respHead->setReturnCode("JH04");
+                        $respHead->setReturnMessage("非服务时间");
+                    } else {
+                        //返回缴费账单
+                        $dinnerStatistic = (new NextMonthPayService())->getOrderConsumption($requestBodyOfDecoded, $check['staff_id'], $epayCode, $phone, $check['company_id'], $check['username'], $pay_date);
+                        $orderConsumption = $dinnerStatistic['dinnerStatistic'];
+                        if (empty($orderConsumption)) {
+                            $respHead->setReturnCode("JH07");
+                            $respHead->setReturnMessage("暂未查到欠费");
+                        } else {
+                            $allMoney = 0;
+                            $respDescDetail = [];
+                            for ($x = 0; $x <= count($orderConsumption); $x++) {
+                                if ($x <= count($orderConsumption) - 1) {
+                                    $allMoney += $orderConsumption[$x]['order_money'];
+                                    //      封装info内部类bill内部的descDtail
+                                    $descDtail1 = new QueryBillResponseInfo\DescDetail($orderConsumption[$x]['dinner'] . "消费次数:", $orderConsumption[$x]['order_count']);
+                                    $descDtail2 = new QueryBillResponseInfo\DescDetail($orderConsumption[$x]['dinner'] . "消费总额:", abs($orderConsumption[$x]['order_money']));
+                                    array_push($respDescDetail, $descDtail1, $descDtail2);
+                                }
+                            }
+                            //      封装info内部类bill，并将其转化为array形式封装给info
+                            $respBill->setDescDetails($respDescDetail);
+                            $respBill->setOweAmt(abs($allMoney));
+                            $respBill->setBillNo($dinnerStatistic['order_num']);
+                            $respBill->setBillName("饭堂餐费缴纳");
+                            $respBill->setFeeAmt("0.00");
+                            $respBills = array($respBill);
+
+                            $respInfo->setTotalBillCount('1');
+                            $respInfo->setBills($respBills);
+
+                            $respHead->setReturnCode("0000");
+                            $respHead->setReturnMessage("账单查询成功，返回成功标志");
+                        }
                     }
                 }
-                //      封装info内部类bill，并将其转化为array形式封装给info
-                $respBill->setDescDetails($respDescDetail);
-                $respBill->setOweAmt(abs($allMoney));
-                $respBill->setBillNo($dinnerStatistic['order_num']);
-                $respBill->setBillName("饭堂餐费缴纳");
-                $respBill->setFeeAmt("0.00");
-                $respBills = array($respBill);
-
-                $respInfo->setTotalBillCount('1');
-                $respInfo->setBills($respBills);
-
-                $respHead->setReturnCode("0000");
-                $respHead->setReturnMessage("账单查询成功，返回成功标志");
             }
             //      封装info信息
             $respInfo->setEpayCode($epayCode);
@@ -126,7 +129,7 @@ class QueryBill extends Controller
 
             $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
             $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
-            $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);;
+            $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);
             // 加签名
             $signatrue = SignatureAndVerification::sign_with_sha1_with_rsa($responseJson);
             $responseStr = $signatrue . "||" . (base64_encode($responseJson));
