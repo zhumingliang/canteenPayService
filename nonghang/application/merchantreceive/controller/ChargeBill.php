@@ -32,7 +32,6 @@ class ChargeBill
     {
         $util = new HttpClientUtils();
         $requestMap = $util->requestBodyOfBase64();
-
         //使用base64解析完成后的requestBody
         $requestBodyOfDecoded = $requestMap['requestBodyOfDecoded'];
         //解析前的requestBody
@@ -174,7 +173,6 @@ class ChargeBill
             $respMessage = new Message($respInfo, $respHead, $requestBodyOfDecoded->message->info, $requestBodyOfDecoded->message->head);
             $responseBody = new Body($requestBodyOfDecoded->format, $respMessage);
             $responseJson = json_encode($responseBody, JSON_UNESCAPED_UNICODE);
-            $requestBodyOfDecoded = '';
             //处理缴费
             (new NextMonthPayService())->payHandel($requestBodyOfDecoded, $respHead->getReturnCode());
             // 加签名
